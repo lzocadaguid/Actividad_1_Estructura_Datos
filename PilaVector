@@ -1,1 +1,147 @@
-dd
+import java.util.Random;
+import java.util.Scanner;
+
+public class PilaVector {
+    private static int[] pila;
+    private static int limVector = -1;
+    private static int maximoPila;
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Random random = new Random();
+
+         System.out.println("Bienvenido al programa de Pila de Vector \n"); 
+        
+        // aqui vamos a solicitar el tamaño máximo de la pila
+        System.out.print("Ingrese por favor el tamano maximo de la pila: ");
+        maximoPila = scanner.nextInt();
+
+        // Solicitar la cantidad de elementos a llenar en la pila
+        System.out.print("Ingrese ahora por favor la cantidad de elementos a llenar en la pila: ");
+        int cantidadElementosPila = scanner.nextInt();
+
+        //  porcedemos a verificar que la cantidad de elementos no exceda el tamaño máximo de la pila como unica condicion para garantizar de que genere el calculo correctamente
+        
+        if (cantidadElementosPila > maximoPila) {
+            System.out.println(" error, la cantidad de elementos no puede exceder el tamaño máximo de la pila, por favor intente nuevamente");
+            return;
+        }
+
+        // ahora vamos a crear la pila (vector) y llenarla con números aleatorios segun el enunciado
+        pila = new int[maximoPila];
+
+        for (int i = 0; i < cantidadElementosPila; i++) {
+            int numeroAleatorio = random.nextInt(101); // números aleatorios entre 0 y 100 segun el enunciado
+            push(numeroAleatorio);
+        }
+
+        // generamos el metodo para cntar números pares e impares
+        int pares = 0;
+        int impares = 0;
+
+        for (int i = 0; i <= limVector; i++) {
+            if (pila[i] % 2 == 0) {
+                pares++;
+            } else {
+                impares++;
+            }
+        }
+
+        // ahora vamos a imprimir resultados
+ 
+        System.out.println("muy bien, ahora vamos a calcular y mostrar los resultados:");        
+        System.out.println("el numero en la pila es de:");
+        for (int i = 0; i <= limVector; i++) {
+            System.out.print(pila[i] + " ");
+        }
+        System.out.println();
+        System.out.println("La cantidad de numeros pares es de: " + pares);
+        System.out.println("La cantidad de numeros impares es de: " + impares);
+
+        // uso de los  métodos del enunciado
+        
+        // metodo para buscar un elemento indicado su posicion
+        System.out.print("Ingrese por favor la posicion del elemento a buscar: ");
+        int posicionBuscar = scanner.nextInt();
+        System.out.println("el elemento en la posicion indicada es " + posicionBuscar + ": " + buscarElemento(posicionBuscar));
+
+                // metodo para insertar un elemento 
+        
+        System.out.print("por favor ingrese el nuevo elemento a insertar: ");
+        int nuevoElemento = scanner.nextInt();
+        insertarElemento(nuevoElemento);
+
+               // metodo para actualizar un elemento indicando su posicion 
+        
+        System.out.print("por favor ingrese la posicion del elemento a actualizar: ");
+        int posicionActualizar = scanner.nextInt();
+        System.out.print("ahora, por favor ingrese el nuevo valor: ");
+        int nuevoValor = scanner.nextInt();
+        actualizarElemento(posicionActualizar, nuevoValor);
+
+               // metodo para eliminar un elemento de la pila     
+        
+        System.out.print("por favor ingrese la posición del elemento a eliminar: ");
+        int posicionElimVectorinar = scanner.nextInt();
+        elimVectorinarElemento(posicionElimVectorinar);
+
+        scanner.close();
+    }
+
+    // Método para insertar un elemento en la pila
+    
+    public static void push(int elemento) {
+        if (limVector < maximoPila - 1) {
+            pila[++limVector] = elemento;
+        } else {
+            System.out.println("atencion, la pila esta llena.");
+        }
+    }
+
+    // Método para buscar un elemento indicando su posición
+    
+    public static int buscarElemento(int posicion) {
+        if (posicion >= 0 && posicion <= limVector) {
+            return pila[posicion];
+        } else {
+            System.out.println("error, la posicion es inválida, intente nuevamente");
+            return -1;
+        }
+    }
+
+    // Método para insertar un nuevo elemento en la pila
+    
+    public static void insertarElemento(int elemento) {
+        if (limVector < maximoPila - 1) {
+            push(elemento);
+            System.out.println("Genial, elemento insertado: " + elemento);
+        } else {
+            System.out.println("atencion, no hay espacio disponible en la pila.");
+        }
+    }
+
+    // Método para actualizar un elemento indicando su posición
+    
+    public static void actualizarElemento(int posicion, int nuevoValor) {
+        if (posicion >= 0 && posicion <= limVector) {
+            pila[posicion] = nuevoValor;
+            System.out.println("perfecto, elemento en la posicion " + posicion + " actualizado a: " + nuevoValor);
+        } else {
+            System.out.println("error, posicion invalida intente nuevamente por favor.");
+        }
+    }
+
+    // Método para eliminar un elemento de la pila
+    
+    public static void elimVectorinarElemento(int posicion) {
+        if (posicion >= 0 && posicion <= limVector) {
+            for (int i = posicion; i < limVector; i++) {
+                pila[i] = pila[i + 1];
+            }
+            limVector--;
+            System.out.println("Elemento en la posicion " + posicion + " eliminado.");
+        } else {
+            System.out.println("Posición invalida.");
+        }
+    }
+}
