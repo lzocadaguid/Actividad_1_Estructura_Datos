@@ -1,0 +1,274 @@
+// autor. Luis Zocadagui
+
+import java.util.Scanner;
+
+public class Biblioteca_ucompensar {
+    static final int limite_libros = 100;
+    static String[][] libros = new String[limite_libros][5];
+    static int contadorLibros = 0;
+    static Scanner scanner = new Scanner(System.in);
+            
+    public static void main(String[] args) {
+ 
+// Mensaje de Bienvenida al aplicativo 
+        
+         System.out.println("Buen Dia, Bienvenido al aplicativo de la biblioteca de la Ucompensar");            
+         System.out.println("a continuacion por favor debera seleccionar la opcion de su preferencia"); 
+      
+        
+ // solicitar la opcion segun el enunciado y necesidad del usuario
+        
+        int opcion_menu;
+        do {
+
+            System.out.println("");            
+            System.out.println("Seleccione una opcion por favor:");
+            System.out.println("1. Registrar nuevo libro");
+            System.out.println("2. Actualizar libro");
+            System.out.println("3. Eliminar libro");
+            System.out.println("4. Buscar libro");
+            System.out.println("5. Ordenar libros");
+            System.out.println("6. Salir del aplicativo");
+            System.out.print("Seleccione una opcion por favor: ");
+            opcion_menu = scanner.nextInt();
+            scanner.nextLine();
+
+// de acuerdo a la opcion ingresada por el usuario ejecutamos el metodo correspondiente
+            
+            switch (opcion_menu) {
+                case 1:
+                    registrarLibro();
+                    break;
+                case 2:
+                    actualizarLibro();
+                    break;
+                case 3:
+                    eliminarLibro();
+                    break;
+                case 4:
+                    buscarLibro();
+                    break;
+                case 5:
+                    ordenarLibros();
+                    break;
+                case 6:
+                    System.out.println("Saliendo del programa...");
+                    break;
+                default:
+                    System.out.println("Opción no válida. Intente de nuevo por favor.");
+            }
+        } while (opcion_menu != 6);
+    }
+
+ // metodo para registrar nuevos libros
+
+    
+    public static void registrarLibro() {
+        if (contadorLibros < limite_libros) {
+            System.out.print("Ingrese por favor el codigo del libro: ");
+            libros[contadorLibros][0] = scanner.nextLine();
+            System.out.print("Ingrese por favor el nombre del libro: ");
+            libros[contadorLibros][1] = scanner.nextLine();
+            System.out.print("Ingrese por favor el autor del libro: ");
+            libros[contadorLibros][2] = scanner.nextLine();
+            System.out.print("Ingrese por favor la materia del libro: ");
+            libros[contadorLibros][3] = scanner.nextLine();
+            System.out.print("Ingrese por favor el numero de paginas del libro: ");
+            libros[contadorLibros][4] = scanner.nextLine();
+            contadorLibros++;
+            System.out.println("¡Exelente! el Libro ha sido registrado exitosamente.");
+            
+        } else {
+            System.out.println("error, no se pueden registrar mas libros, Capacidad máxima alcanzada, intente nuevamente por favor.");
+        }
+    }
+
+     // metodo para actualizar los libros
+    
+    public static void actualizarLibro() {
+        System.out.print("Ingrese por favor el codigo del libro a actualizar: ");
+        String codigo = scanner.nextLine();
+        int indice = buscarLibroPorCodigo(codigo);
+        if (indice != -1) {
+            System.out.print("Ingrese por favor nuevo nombre del libro: ");
+            libros[indice][1] = scanner.nextLine();
+            System.out.print("Ingrese por favor nuevo autor del libro: ");
+            libros[indice][2] = scanner.nextLine();     
+            System.out.print("Ingrese por favor la nueva materia del libro: ");
+            libros[indice][3] = scanner.nextLine();
+            System.out.print("Ingrese por favor el nuevo numero de paginas del libro: ");
+            libros[indice][4] = scanner.nextLine();
+            System.out.println("¡Buen Trabajo! Libro actualizado exitosamente.");
+        } else {
+            System.out.println("error, Libro no encontrado, intente nuevamente por favor.");
+        }
+    }
+
+    // metodo para eliminar los libros
+    
+    public static void eliminarLibro() {
+        System.out.print("Ingrese por favor el codigo del libro a eliminar: ");
+        String codigo = scanner.nextLine();
+        int indice = buscarLibroPorCodigo(codigo);
+        if (indice != -1) {
+            for (int i = indice; i < contadorLibros - 1; i++) {
+                libros[i] = libros[i + 1];
+            }
+            libros[contadorLibros - 1] = new String[5];
+            contadorLibros--;
+            System.out.println("OK, Libro eliminado exitosamente.");
+        } else {
+            System.out.println("error, Libro no encontrado por favor verifique el codigo ingresado e intente nuevamente.");
+        }
+    }
+    
+      // metodo para buscar los libros segun el metodo de busqueda del enunciado
+
+    public static void buscarLibro() {
+        
+        System.out.println("Buenvenido a la busqueda avanzada de libros:");
+        System.out.println("1. Busqueda secuencial");
+        System.out.println("2. Busqueda binaria");
+        System.out.print("Por favor, Seleccione un método de búsqueda: ");
+        int metodo = scanner.nextInt();
+        
+       scanner.nextLine();
+
+       
+        System.out.print("Ingrese por favor el codigo del libro a buscar: ");
+        String codigo = scanner.nextLine();
+
+        int indice = -1;
+        if (metodo == 1) {
+            
+            indice = buscarLibroSecuencial(codigo);
+        } else if (metodo == 2) {
+            ordenarLibrosPorCodigo(); // esta sentencia es necesaria para búsqueda binaria
+            indice = buscarLibroBinario(codigo);
+        } else {
+            System.out.println("error, Metodo de busqueda no valido, intente nuevamente por favor.");
+        }
+
+        if (indice != -1) {
+            System.out.println("Bien Hecho, Libro encontrado, a continuacion se mostrara la informacion:");
+            System.out.println("Codigo: " + libros[indice][0]);
+            System.out.println("Nombre: " + libros[indice][1]);
+            System.out.println("Autor: " + libros[indice][2]);
+            System.out.println("Materia: " + libros[indice][3]);
+            System.out.println("Numero de páginas: " + libros[indice][4]);
+        } else {
+            System.out.println("error, Libro no encontrado, por favor valide el codigo e intente nuevamente.");
+        }
+    }
+
+        // metodo para buscar libro secuencial
+    
+    public static int buscarLibroSecuencial(String codigo) {
+        for (int i = 0; i < contadorLibros; i++) {
+            if (libros[i][0].equals(codigo)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+            // metodo para buscar libro de forma binaria
+    
+    public static int buscarLibroBinario(String codigo) {
+        int inicio = 0;
+        int fin = contadorLibros - 1;
+        while (inicio <= fin) {
+            int medio = (inicio + fin) / 2;
+            if (libros[medio][0].compareTo(codigo) == 0) {
+                return medio;
+            } else if (libros[medio][0].compareTo(codigo) < 0) {
+                inicio = medio + 1;
+            } else {
+                fin = medio - 1;
+            }
+        }
+        return -1;
+    }
+
+    public static void ordenarLibros() {
+        System.out.println("a continuacion por favor seleccione el criterio de ordenacion:");
+        System.out.println("1. Ordenar por autor");
+        System.out.println("2. Ordenar por codigo");
+        System.out.println("3. Ordenar por materia");
+        System.out.print("Seleccione por favor un criterio de ordenacion: ");
+        int criterio_Ordenacion = scanner.nextInt();
+        scanner.nextLine(); 
+
+        switch (criterio_Ordenacion) {
+            case 1:
+                ordenarLibrosPorAutor();
+                break;
+            case 2:
+                ordenarLibrosPorCodigo();
+                break;
+            case 3:
+                ordenarLibrosPorMateria();
+                break;
+            default:
+                System.out.println("error,criterio de ordenación no valido, por favor intente nuevamente.");
+        }
+    }
+
+    // metodo para ordenar libros por autor
+    
+    public static void ordenarLibrosPorAutor() {
+        for (int i = 0; i < contadorLibros - 1; i++) {
+            int minIndex = i;
+            for (int j = i + 1; j < contadorLibros; j++) {
+                if (libros[j][2].compareTo(libros[minIndex][2]) < 0) {
+                    minIndex = j;
+                }
+            }
+            String[] temp = libros[minIndex];
+            libros[minIndex] = libros[i];
+            libros[i] = temp;
+        }
+        System.out.println("completado, libros ordenados por autor.");
+    }
+
+        // metodo para ordenar libros por codigo
+    public static void ordenarLibrosPorCodigo() {
+        boolean swapped;
+        do {
+            swapped = false;
+            for (int i = 0; i < contadorLibros - 1; i++) {
+                if (libros[i][0].compareTo(libros[i + 1][0]) > 0) {
+                    String[] temp = libros[i];
+                    libros[i] = libros[i + 1];
+                    libros[i + 1] = temp;
+                    swapped = true;
+                }
+            }
+        } while (swapped);
+        System.out.println("Proceso Exitoso, Libros ordenados por codigo.");
+    }
+
+        // metodo para ordenar libros por materia
+    
+    public static void ordenarLibrosPorMateria() {
+        for (int i = 1; i < contadorLibros; i++) {
+            String[] key = libros[i];
+            int j = i - 1;
+            while (j >= 0 && libros[j][3].compareTo(key[3]) > 0) {
+                libros[j + 1] = libros[j];
+                j--;
+            }
+            libros[j + 1] = key;
+        }
+        System.out.println("Proceso Exitoso, Libros ordenados por materia.");
+    }
+
+    public static int buscarLibroPorCodigo(String codigo) {
+        for (int i = 0; i < contadorLibros; i++) {
+            if (libros[i][0].equals(codigo)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+}
